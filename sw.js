@@ -1,6 +1,6 @@
-// しらべノート: オフライン用のシンプルなService Worker
+// ゼミノート: オフライン用のシンプルなService Worker
 // アプリ本体を更新したら CACHE のバージョンを上げてください
-const CACHE = "shirabe-note-v22";
+const CACHE = "zemi-note-v24";
 const FILES = ["./", "./index.html", "./manifest.webmanifest", "./icon-180.png", "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png"];
 
 self.addEventListener("install", (e) => {

@@ -1,6 +1,6 @@
 {
-  "name": "しらべノート",
-  "short_name": "しらべノート",
+  "name": "ゼミノート",
+  "short_name": "ゼミノート",
   "description": "出典・フィードバック・主張と根拠・調査データ・アンケート・提出前チェックを管理",
   "start_url": "./index.html",
   "scope": "./",
