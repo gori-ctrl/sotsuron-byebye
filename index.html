@@ -9,8 +9,8 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="ゼミノート">
-<title>ゼミノート - 卒論・レポートの情報管理</title>
+<meta name="apple-mobile-web-app-title" content="卒論ノート">
+<title>卒論ノート - 卒論・レポートの情報管理</title>
 <style>
 :root{--bg:#f5f4ef;--card:#fff;--ink:#1f2421;--sub:#6a6f6b;--line:#e4e2da;--acc:#1f6f5c;--acc2:#e6f1ed;--warn:#b4532a;--bad:#b3261e;--chip:#f0efe9;--onacc:#fff;--onbad:#fff;--midbg:#fff1dc;--badbg:#fdecea;--track:#ece9e1;color-scheme:light}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#151918;--card:#202826;--ink:#f1f4f2;--sub:#b9c2bd;--line:#3a4541;--acc:#6fd2b5;--acc2:#21433a;--warn:#e8985f;--bad:#f2867d;--chip:#262d2a;--onacc:#0f1f1a;--onbad:#2a0f0d;--midbg:#3a2f1c;--badbg:#3b2321;--track:#2e3633;color-scheme:dark}}
@@ -217,7 +217,7 @@ input::placeholder,textarea::placeholder{color:var(--sub);opacity:.8}
 
 <header>
   <div>
-    <h1>📚 ゼミノート</h1>
+    <h1>📚 卒論ノート</h1>
     <p>調べものと卒論の記録を1か所に。データはこのブラウザ内に保存されます。</p>
   </div>
   <div class="hbtns"><button id="btnSearch" title="Ctrl+K または /">🔍 検索</button><button id="btnHelp">❓ 使い方</button><button id="theme" title="表示の明るさ">🌓 自動</button><button id="btnHub">🗂 データ</button></div>
@@ -1128,7 +1128,7 @@ function markBackup(){notes.meta.lastBackup=Date.now();persist();$("iomsg").text
 $("exp").onclick=function(){ioOpen("exp","バックアップ(書き出し)",JSON.stringify({v:3,items:items,notes:notes}),"コピー","「ファイルに保存」でJSONをダウンロードできます。ダウンロードが使えない画面では「コピー」してメモ帳などに保存してください。")};
 $("imp").onclick=function(){ioOpen("imp","読み込み(既存データに追加)","","読み込む","バックアップのJSONを貼り付けるか、「ファイルを選ぶ」から読み込みます。同じデータは重複しません。")};
 $("iosave").onclick=function(){
-  var ics=ioMode==="ics",md=ioMode==="md",name=ics?"zemi-note-calendar.ics":md?"zemi-note-"+today().replace(/-/g,"")+".md":"zemi-note-backup-"+today().replace(/-/g,"")+".json",ok=false;
+  var ics=ioMode==="ics",md=ioMode==="md",name=ics?"sotsuron-note-calendar.ics":md?"sotsuron-note-"+today().replace(/-/g,"")+".md":"sotsuron-note-backup-"+today().replace(/-/g,"")+".json",ok=false;
   try{var b=new Blob([$("iota").value],{type:ics?"text/calendar":md?"text/markdown":"application/json"}),u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},1500);ok=true}catch(e){}
   if(ok){if(!ics&&!md)markBackup();$("iomsg").textContent=name+" を保存しました。ダウンロードされない場合は「コピー」を使ってください。"}
   else $("iomsg").textContent="この画面ではファイル保存が使えません。「コピー」を使ってください。";
@@ -1735,7 +1735,7 @@ function refSorted(scope){
 function authYear(i){return ((i.author||"").split("、")[0]||i.title)+(i.year?" "+i.year:"")}
 function exportBlocks(){
   var P=exPartsSel(),f=$("ex_fmt").value,B=[];
-  B.push({t:"title",x:"ゼミノート 書き出し"});B.push({t:"note",x:today()+" 時点"});
+  B.push({t:"title",x:"卒論ノート 書き出し"});B.push({t:"note",x:today()+" 時点"});
   if(P.refs){B.push({t:"h1",x:"参考文献"});refSorted($("ex_scope").value).forEach(function(i){B.push({t:"ref",x:cite(i,f)})})}
   if(P.quotes){
     B.push({t:"h1",x:"引用箇所"});var any=false;
@@ -1839,7 +1839,7 @@ function downloadBlob(blob,name){
 function exPartsAny(){var P=exPartsSel();return P.refs||P.quotes||P.claims||P.chap}
 $("ex_docx").onclick=function(){
   if(!exPartsAny()){toast("含める内容を選んでください");return}
-  var ok=downloadBlob(buildDocxBlob(exportBlocks()),"zemi-note-"+today().replace(/-/g,"")+".docx");
+  var ok=downloadBlob(buildDocxBlob(exportBlocks()),"sotsuron-note-"+today().replace(/-/g,"")+".docx");
   toast(ok?"Wordファイルを書き出しました(ダウンロードを確認してください)":"この画面ではダウンロードできません。公開したページで試すか、Markdownをコピーしてください",{ok:ok,ms:7000});
 };
 $("ex_md").onclick=function(){
@@ -2133,7 +2133,7 @@ function openIcs(){
 /* ================= ファイルへの自動保存・同期(PCのChrome/Edge) ================= */
 var FS_OK=typeof window.showSaveFilePicker==="function"&&typeof window.showOpenFilePicker==="function"&&typeof indexedDB!=="undefined";
 var fsHandle=null,fsStatus="none",fsErr="",fsLast=0,fsTimer=null,fsBusy=Promise.resolve(),syncRaw=null,fsChk=0;
-var FS_TYPES=[{description:"ゼミノートのデータ(JSON)",accept:{"application/json":[".json"]}}];
+var FS_TYPES=[{description:"卒論ノートのデータ(JSON)",accept:{"application/json":[".json"]}}];
 function idbOpen(){return new Promise(function(res,rej){var r=indexedDB.open("shirabe-note-fs",1);r.onupgradeneeded=function(){r.result.createObjectStore("kv")};r.onsuccess=function(){res(r.result)};r.onerror=function(){rej(r.error)}})}
 function idbGet(k){return idbOpen().then(function(db){return new Promise(function(res,rej){var q=db.transaction("kv").objectStore("kv").get(k);q.onsuccess=function(){res(q.result)};q.onerror=function(){rej(q.error)}})})}
 function idbSet(k,v){return idbOpen().then(function(db){return new Promise(function(res,rej){var tx=db.transaction("kv","readwrite");tx.objectStore("kv").put(v,k);tx.oncomplete=function(){res()};tx.onerror=function(){rej(tx.error)}})})}
@@ -2202,7 +2202,7 @@ function fsFail(e){
 }
 async function fsNew(){
   try{
-    var h=await window.showSaveFilePicker({suggestedName:"zemi-note-data.json",types:FS_TYPES});
+    var h=await window.showSaveFilePicker({suggestedName:"sotsuron-note-data.json",types:FS_TYPES});
     fsHandle=h;await idbSet("handle",h);fsStatus="ok";fsErr="";persist();await writeNow();render();toast("自動保存を開始しました",{ok:true});
   }catch(e){fsFail(e)}
 }

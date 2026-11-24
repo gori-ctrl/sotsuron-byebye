@@ -1,6 +1,6 @@
 {
-  "name": "ゼミノート",
-  "short_name": "ゼミノート",
+  "name": "卒論ノート",
+  "short_name": "卒論ノート",
   "description": "出典・フィードバック・主張と根拠・調査データ・アンケート・提出前チェックを管理",
   "start_url": "./index.html",
   "scope": "./",
