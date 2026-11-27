@@ -1,6 +1,6 @@
 // 卒論ノート: オフライン用のシンプルなService Worker
 // アプリ本体を更新したら CACHE のバージョンを上げてください
-const CACHE = "sotsuron-note-v25";
+const CACHE = "sotsuron-note-v30";
 const FILES = ["./", "./index.html", "./manifest.webmanifest", "./icon-180.png", "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png"];
 
 self.addEventListener("install", (e) => {
